@@ -1,0 +1,74 @@
+{
+  "site": {
+    "bio": "narratives for tech and ai companies. kalshi (nda), retell ai, deel, bitgo, ricursive intelligence, evolving ai & greg isenberg. brief to final cut, all mine.",
+    "x": "",
+    "instagram": "",
+    "linkedin": "",
+    "email": ""
+  },
+  "posts": [
+    {
+      "id": "how-i-work",
+      "title": "how i work",
+      "tag": "",
+      "createdAt": 1794850000000,
+      "body": "every project i've done started the same way: one call. that's the whole brief.\n\nafter the call i go and read. different sources, different sides of the topic, until i actually understand it and not just the vocabulary around it.\n\nthen i think. a lot. the question i keep asking is how you'd convince someone of this from first principles, without leaning on hype. that's where the perspective comes from.\n\ni write a couple of angles, pick the one that holds, and write the script.\n\nthen it goes to production. i sit with the editors and give them the visual direction: how it should move, what it should look like, where it should land.\n\ni own all of it, end to end."
+    },
+    {
+      "id": "kalshi",
+      "title": "kalshi: narrative",
+      "tag": "nda",
+      "createdAt": 1794763600000,
+      "body": "narrative work for kalshi. this one is under nda, so i can talk about how i worked on it, not what's in it."
+    },
+    {
+      "id": "recursive-intelligence",
+      "title": "ricursive intelligence",
+      "tag": "",
+      "createdAt": 1794677200000,
+      "body": "narrative and script. one call for the brief, then research, angles, script and visual direction through to the final cut."
+    },
+    {
+      "id": "retell-ai",
+      "title": "retell ai: launch narrative",
+      "tag": "",
+      "createdAt": 1794590800000,
+      "body": "the launch narrative for retell ai. one call for the brief, then research, angles, script and visual direction through to the final cut."
+    },
+    {
+      "id": "litigation-in-2026",
+      "title": "litigation in 2026",
+      "tag": "",
+      "createdAt": 1794504400000,
+      "body": "narrative and script. one call for the brief, then research, angles, script and visual direction through to the final cut."
+    },
+    {
+      "id": "greg-isenberg",
+      "title": "greg isenberg",
+      "tag": "",
+      "createdAt": 1794418000000,
+      "body": "narrative and script. one call for the brief, then research, angles, script and visual direction through to the final cut."
+    },
+    {
+      "id": "bitgo",
+      "title": "bitgo",
+      "tag": "",
+      "createdAt": 1794331600000,
+      "body": "narrative and script. one call for the brief, then research, angles, script and visual direction through to the final cut."
+    },
+    {
+      "id": "deel-launch",
+      "title": "deel: launch",
+      "tag": "",
+      "createdAt": 1794245200000,
+      "body": "the launch narrative for deel. one call for the brief, then research, angles, script and visual direction through to the final cut."
+    },
+    {
+      "id": "evolving-ai",
+      "title": "evolving ai",
+      "tag": "",
+      "createdAt": 1794158800000,
+      "body": "narrative and script. one call for the brief, then research, angles, script and visual direction through to the final cut."
+    }
+  ]
+}
