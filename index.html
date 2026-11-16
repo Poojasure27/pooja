@@ -18,12 +18,12 @@
   --muted:#8b8985;
   --rule:#1d1d1c;
   --danger:#d98a7a;
-  --display:"Young Serif","Gelasio",Georgia,serif;
-  --body:"Gelasio","Iowan Old Style",Georgia,"Times New Roman",serif;
+  --display:"Inter",system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --body:"Inter",system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink)}
-body{font-family:var(--body);font-size:20px;line-height:1.65;-webkit-font-smoothing:antialiased}
+body{font-family:var(--body);font-weight:300;font-size:17px;line-height:1.7;letter-spacing:-0.005em;-webkit-font-smoothing:antialiased}
 .wrap{max-width:1120px;margin:0 auto;padding:clamp(40px,9vw,112px) clamp(20px,5vw,48px) 96px}
 a{color:var(--muted);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;text-decoration-color:#3a3a38}
 a:hover{color:var(--bright)}
@@ -35,16 +35,16 @@ button:hover{color:var(--bright)}
 .top{display:flex;gap:clamp(28px,5vw,52px);align-items:flex-start;flex-wrap:wrap}
 .photo{width:min(244px,100%);aspect-ratio:1;object-fit:cover;border-radius:3px;display:block;flex:none}
 .about{flex:1 1 380px;max-width:580px;padding-top:14px;display:flex;flex-direction:column;gap:30px}
-.bio{font-size:17px;line-height:1.7}
+.bio{font-size:15.5px;line-height:1.75}
 .bio p{margin:0 0 .9em}
 .bio p:last-child{margin:0}
-.links{display:flex;flex-wrap:wrap;gap:6px 10px;font-size:15px;color:var(--muted);align-items:baseline}
+.links{display:flex;flex-wrap:wrap;gap:6px 10px;font-size:14px;color:var(--muted);align-items:baseline}
 .links a{text-decoration:none}
 .links .dot{opacity:.5}
 
 .words{margin-top:clamp(56px,8vw,84px);max-width:600px}
 .words-head{display:flex;align-items:baseline;gap:14px;margin-bottom:10px}
-h2{font-family:var(--display);font-weight:400;font-size:28px;color:var(--bright);margin:0;line-height:1.2}
+h2{font-family:var(--display);font-weight:300;font-size:26px;letter-spacing:-0.02em;color:var(--bright);margin:0;line-height:1.2}
 .plus{font-size:26px;line-height:1;padding:0 6px}
 .list{list-style:none;margin:0;padding:0}
 .list li{border-bottom:1px solid var(--rule)}
@@ -56,16 +56,16 @@ h2{font-family:var(--display);font-weight:400;font-size:28px;color:var(--bright)
 .piece{max-width:640px}
 .bar{display:flex;gap:18px;font-size:15px;margin-bottom:44px}
 .bar a{text-decoration:none}
-h1{font-family:var(--display);font-weight:400;font-size:clamp(30px,4.5vw,40px);line-height:1.2;color:var(--bright);margin:0 0 8px;text-wrap:balance}
+h1{font-family:var(--display);font-weight:300;font-size:clamp(28px,4.2vw,36px);letter-spacing:-0.02em;line-height:1.2;color:var(--bright);margin:0 0 8px;text-wrap:balance}
 .date{font-size:15px;color:var(--muted);margin-bottom:36px}
 .prose p{margin:0 0 1.15em;overflow-wrap:anywhere}
-.prose h3{font-family:var(--display);font-weight:400;font-size:22px;color:var(--bright);margin:1.8em 0 .5em}
+.prose h3{font-family:var(--display);font-weight:300;font-size:20px;letter-spacing:-0.01em;color:var(--bright);margin:1.8em 0 .5em}
 
 .editor{max-width:640px;display:flex;flex-direction:column;gap:18px}
 .editor input,.editor textarea{font:inherit;color:var(--ink);background:none;border:0;border-bottom:1px solid var(--rule);padding:8px 0;width:100%;outline:none;border-radius:0}
 .editor input:focus,.editor textarea:focus{border-bottom-color:var(--muted)}
 .editor ::placeholder{color:#55544f}
-#f-title{font-family:var(--display);font-size:clamp(28px,4.5vw,38px);color:var(--bright)}
+#f-title{font-family:var(--display);font-weight:300;letter-spacing:-0.02em;font-size:clamp(26px,4.2vw,34px);color:var(--bright)}
 .editor textarea{resize:vertical;min-height:320px;line-height:1.65}
 #b-bio{min-height:240px}
 .hint{font-size:14px;color:var(--muted);line-height:1.5}
