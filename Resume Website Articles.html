@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>pooja</title>
+<meta name="description" content="narratives for tech and ai companies.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,400;0,500;1,400&family=Young+Serif&display=swap" rel="stylesheet">
+<style>
+/* layout: one black page. photo + bio on top, a ruled list of writing below, a reading column for each piece. */
+:root{
+  color-scheme: dark;
+  --bg:#000;
+  --ink:#d2d0cb;
+  --bright:#fff;
+  --muted:#8b8985;
+  --rule:#1d1d1c;
+  --danger:#d98a7a;
+  --display:"Young Serif","Gelasio",Georgia,serif;
+  --body:"Gelasio","Iowan Old Style",Georgia,"Times New Roman",serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:var(--body);font-size:20px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:clamp(40px,9vw,112px) clamp(20px,5vw,48px) 96px}
+a{color:var(--muted);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;text-decoration-color:#3a3a38}
+a:hover{color:var(--bright)}
+button{font:inherit;color:var(--muted);background:none;border:0;padding:0;cursor:pointer}
+button:hover{color:var(--bright)}
+:focus-visible{outline:1px solid var(--muted);outline-offset:4px;border-radius:2px}
+[hidden]{display:none !important}
+
+.top{display:flex;gap:clamp(28px,5vw,52px);align-items:flex-start;flex-wrap:wrap}
+.photo{width:min(244px,100%);aspect-ratio:1;object-fit:cover;border-radius:3px;display:block;flex:none}
+.about{flex:1 1 380px;max-width:580px;padding-top:14px;display:flex;flex-direction:column;gap:30px}
+.bio{font-size:17px;line-height:1.7}
+.bio p{margin:0 0 .9em}
+.bio p:last-child{margin:0}
+.links{display:flex;flex-wrap:wrap;gap:6px 10px;font-size:15px;color:var(--muted);align-items:baseline}
+.links a{text-decoration:none}
+.links .dot{opacity:.5}
+
+.words{margin-top:clamp(56px,8vw,84px);max-width:600px}
+.words-head{display:flex;align-items:baseline;gap:14px;margin-bottom:10px}
+h2{font-family:var(--display);font-weight:400;font-size:28px;color:var(--bright);margin:0;line-height:1.2}
+.plus{font-size:26px;line-height:1;padding:0 6px}
+.list{list-style:none;margin:0;padding:0}
+.list li{border-bottom:1px solid var(--rule)}
+.list a{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:10px 0;color:var(--ink);text-decoration:none}
+.list a:hover{color:var(--bright)}
+.list .tag{font-size:14px;color:var(--muted);white-space:nowrap}
+.empty{color:var(--muted);padding:10px 0}
+
+.piece{max-width:640px}
+.bar{display:flex;gap:18px;font-size:15px;margin-bottom:44px}
+.bar a{text-decoration:none}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(30px,4.5vw,40px);line-height:1.2;color:var(--bright);margin:0 0 8px;text-wrap:balance}
+.date{font-size:15px;color:var(--muted);margin-bottom:36px}
+.prose p{margin:0 0 1.15em;overflow-wrap:anywhere}
+.prose h3{font-family:var(--display);font-weight:400;font-size:22px;color:var(--bright);margin:1.8em 0 .5em}
+
+.editor{max-width:640px;display:flex;flex-direction:column;gap:18px}
+.editor input,.editor textarea{font:inherit;color:var(--ink);background:none;border:0;border-bottom:1px solid var(--rule);padding:8px 0;width:100%;outline:none;border-radius:0}
+.editor input:focus,.editor textarea:focus{border-bottom-color:var(--muted)}
+.editor ::placeholder{color:#55544f}
+#f-title{font-family:var(--display);font-size:clamp(28px,4.5vw,38px);color:var(--bright)}
+.editor textarea{resize:vertical;min-height:320px;line-height:1.65}
+#b-bio{min-height:240px}
+.hint{font-size:14px;color:var(--muted);line-height:1.5}
+.row{display:flex;gap:22px;align-items:baseline;flex-wrap:wrap;font-size:16px}
+.row .primary{color:var(--bright);border-bottom:1px solid var(--muted)}
+.row .danger{margin-left:auto}
+.row .danger:hover{color:var(--danger)}
+.msg{font-size:14px;color:var(--danger);min-height:1.4em}
+label{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- home -->
+  <main id="v-home">
+    <section class="top">
+      <img class="photo" src="photo.jpg" alt="Portrait in front of a wall of bookshelves">
+      <div class="about">
+        <div class="bio" id="bio"></div>
+        <div class="links" id="links"></div>
+      </div>
+    </section>
+    <section class="words">
+      <div class="words-head">
+        <h2>words</h2>
+        <button class="plus" id="btn-new" hidden aria-label="Write a new piece" title="Write a new piece">+</button>
+      </div>
+      <ul class="list" id="list"></ul>
+    </section>
+  </main>
+
+  <!-- one piece -->
+  <article id="v-piece" class="piece" hidden>
+    <div class="bar"><a href="#home">← back</a><button id="btn-edit" hidden>edit</button></div>
+    <h1 id="p-title"></h1>
+    <div class="date" id="p-date"></div>
+    <div class="prose" id="p-body"></div>
+  </article>
+
+  <!-- write / edit a piece (owner only) -->
+  <form id="v-editor" class="editor" hidden autocomplete="off">
+    <input id="f-title" type="text" placeholder="title" maxlength="140" aria-label="Title">
+    <textarea id="f-body" placeholder="start writing" aria-label="Body"></textarea>
+    <div class="hint">leave a blank line for a new paragraph. start a line with ## for a subheading. [text](https://link) makes a link.</div>
+    <label>small note beside the title in the list (optional)
+      <input id="f-tag" type="text" maxlength="24" placeholder="e.g. nda">
+    </label>
+    <div class="row">
+      <button type="submit" class="primary" id="btn-publish">publish</button>
+      <button type="button" id="btn-cancel">cancel</button>
+      <button type="button" class="danger" id="btn-delete" hidden>delete</button>
+    </div>
+    <div class="msg" id="e-msg" role="status"></div>
+  </form>
+
+  <!-- edit bio + links (owner only) -->
+  <form id="v-about" class="editor" hidden autocomplete="off">
+    <label>about you
+      <textarea id="b-bio"></textarea>
+    </label>
+    <label>x link <input id="b-x" type="url" placeholder="https://x.com/..."></label>
+    <label>instagram link <input id="b-instagram" type="url" placeholder="https://instagram.com/..."></label>
+    <label>linkedin link <input id="b-linkedin" type="url" placeholder="https://linkedin.com/in/..."></label>
+    <label>email <input id="b-email" type="email" placeholder="you@example.com"></label>
+    <div class="row">
+      <button type="submit" class="primary">save</button>
+      <button type="button" id="b-cancel">cancel</button>
+    </div>
+    <div class="msg" id="b-msg" role="status"></div>
+  </form>
+
+  <!-- sign in (owner only, reached at #signin) -->
+  <form id="v-signin" class="editor" hidden autocomplete="off">
+    <label>paste your key
+      <input id="s-key" type="password" placeholder="github_pat_..." autocomplete="off">
+    </label>
+    <div class="hint">this stays in this browser only. it unlocks writing and editing on this device.</div>
+    <div class="row">
+      <button type="submit" class="primary">sign in</button>
+      <a href="#home">cancel</a>
+    </div>
+    <div class="msg" id="s-msg" role="status"></div>
+  </form>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  /* Where the writing lives. Only someone holding a key for this repository can save. */
+  var OWNER = "Poojasure27", REPO = "pooja", BRANCH = "main", FILE = "content.json";
+  var API = "https://api.github.com/repos/" + OWNER + "/" + REPO;
+  var KEY = "resume-site-key";
+
+  var $ = function(id){ return document.getElementById(id); };
+  var posts = [], site = {bio:"",x:"",instagram:"",linkedin:"",email:""};
+  var token = "", isOwner = false, editingId = null, mode = null, loaded = false, busy = false;
+  try { token = localStorage.getItem(KEY) || ""; } catch(e){}
+  isOwner = !!token;
+
+  /* ---------- helpers ---------- */
+  function str(v){ return typeof v === "string" ? v : ""; }
+  function safeUrl(u){ u = str(u).trim(); return /^https?:\/\//i.test(u) ? u : ""; }
+  function enc(s){ var b = new TextEncoder().encode(s), out = ""; for(var i=0;i<b.length;i++) out += String.fromCharCode(b[i]); return btoa(out); }
+  function dec(b64){ var bin = atob(b64.replace(/\s/g,"")), b = new Uint8Array(bin.length); for(var i=0;i<bin.length;i++) b[i] = bin.charCodeAt(i); return new TextDecoder().decode(b); }
+  function apply(data){
+    data = data || {};
+    var s = data.site || {};
+    site = { bio:str(s.bio), x:str(s.x), instagram:str(s.instagram), linkedin:str(s.linkedin), email:str(s.email) };
+    posts = (Array.isArray(data.posts) ? data.posts : []).map(function(x){
+      return { id:str(x.id), title:str(x.title), body:str(x.body), tag:str(x.tag), createdAt:x.createdAt };
+    }).filter(function(p){ return p.id; }).sort(function(a,b){ return (b.createdAt||0) - (a.createdAt||0); });
+  }
+  function snapshot(){ return { site:site, posts:posts }; }
+
+  function gh(path, opts){
+    opts = opts || {};
+    opts.headers = Object.assign({ "Accept":"application/vnd.github+json", "Authorization":"Bearer " + token }, opts.headers || {});
+    opts.cache = "no-store";
+    return fetch(API + path, opts).then(function(r){
+      if(r.status === 401 || r.status === 403){ var e = new Error("auth"); e.auth = true; throw e; }
+      if(!r.ok){ var e2 = new Error("http " + r.status); e2.status = r.status; throw e2; }
+      return r.json();
+    });
+  }
+  function readRemote(){
+    return gh("/contents/" + FILE + "?ref=" + BRANCH).then(function(j){ return { sha:j.sha, data:JSON.parse(dec(j.content)) }; });
+  }
+  /* Read the newest saved copy, change it, save it back. Retries once if it changed in between. */
+  function save(change, message, again){
+    return readRemote().then(function(cur){
+      apply(cur.data); change();
+      return gh("/contents/" + FILE, { method:"PUT", headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ message:message, branch:BRANCH, sha:cur.sha, content:enc(JSON.stringify(snapshot(), null, 2) + "\n") }) });
+    }).catch(function(e){
+      if(e.status === 409 && !again) return save(change, message, true);
+      throw e;
+    });
+  }
+  function saveError(e){
+    if(e && e.auth) return "your key was refused. open #signin and paste a fresh one. your text is still here.";
+    return "that didn't save. your text is still here, try again.";
+  }
+
+  /* ---------- rendering ---------- */
+  function inline(parent, text){
+    var re = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, last = 0, m;
+    while((m = re.exec(text))){
+      if(m.index > last) parent.appendChild(document.createTextNode(text.slice(last, m.index)));
+      var a = document.createElement("a"); a.href = m[2]; a.textContent = m[1]; a.rel = "noopener"; a.target = "_blank";
+      parent.appendChild(a); last = re.lastIndex;
+    }
+    if(last < text.length) parent.appendChild(document.createTextNode(text.slice(last)));
+  }
+  function prose(el, text){
+    el.textContent = "";
+    str(text).replace(/\r/g,"").split(/\n\s*\n/).forEach(function(block){
+      block = block.trim(); if(!block) return;
+      var node;
+      if(/^##\s+/.test(block)){ node = document.createElement("h3"); node.textContent = block.replace(/^##\s+/,""); }
+      else {
+        node = document.createElement("p");
+        block.split("\n").forEach(function(line, i){ if(i) node.appendChild(document.createElement("br")); inline(node, line); });
+      }
+      el.appendChild(node);
+    });
+  }
+  function renderAbout(){
+    prose($("bio"), site.bio);
+    var box = $("links"); box.textContent = "";
+    var items = [];
+    ["x","instagram","linkedin"].forEach(function(k){
+      var u = safeUrl(site[k]); if(!u) return;
+      var a = document.createElement("a"); a.href = u; a.textContent = k; a.rel = "noopener"; a.target = "_blank"; items.push(a);
+    });
+    var mail = str(site.email).trim();
+    if(/^[^\s@]+@[^\s@]+$/.test(mail)){ var m = document.createElement("a"); m.href = "mailto:" + mail; m.textContent = "email"; m.title = mail; items.push(m); }
+    if(isOwner){
+      var b = document.createElement("button"); b.type = "button";
+      b.textContent = items.length ? "edit" : "edit about + add links";
+      b.addEventListener("click", openAbout); items.push(b);
+      var o = document.createElement("button"); o.type = "button"; o.textContent = "sign out";
+      o.addEventListener("click", signOut); items.push(o);
+    }
+    items.forEach(function(n, i){
+      if(i){ var d = document.createElement("span"); d.className = "dot"; d.textContent = "·"; box.appendChild(d); }
+      box.appendChild(n);
+    });
+  }
+  function renderList(){
+    var ul = $("list"); ul.textContent = "";
+    if(!posts.length){
+      var li = document.createElement("li"); li.className = "empty";
+      li.textContent = !loaded ? "" : isOwner ? "nothing here yet. press + to write." : "nothing here yet.";
+      ul.appendChild(li); return;
+    }
+    posts.forEach(function(p){
+      var li = document.createElement("li"), a = document.createElement("a"), t = document.createElement("span");
+      a.href = "#p-" + p.id; t.textContent = p.title || "untitled"; a.appendChild(t);
+      if(p.tag){ var g = document.createElement("span"); g.className = "tag"; g.textContent = p.tag; a.appendChild(g); }
+      li.appendChild(a); ul.appendChild(li);
+    });
+  }
+  function fmtDate(ms){
+    if(typeof ms !== "number") return "";
+    try { return new Date(ms).toLocaleDateString("en-GB",{month:"short",year:"numeric"}).toLowerCase(); } catch(e){ return ""; }
+  }
+  function currentPost(){
+    var h = location.hash || "";
+    if(h.indexOf("#p-") !== 0) return null;
+    var id = h.slice(3);
+    for(var i=0;i<posts.length;i++) if(posts[i].id === id) return posts[i];
+    return null;
+  }
+  function show(){
+    var p = currentPost();
+    var view = mode === "post" ? "v-editor" : mode === "about" ? "v-about" : location.hash === "#signin" ? "v-signin" : p ? "v-piece" : "v-home";
+    ["v-home","v-piece","v-editor","v-about","v-signin"].forEach(function(v){ $(v).hidden = v !== view; });
+    $("btn-new").hidden = !isOwner;
+    if(view === "v-home"){ renderAbout(); renderList(); }
+    if(view === "v-piece"){
+      $("p-title").textContent = p.title || "untitled";
+      $("p-date").textContent = fmtDate(p.createdAt);
+      prose($("p-body"), p.body);
+      $("btn-edit").hidden = !isOwner;
+      document.title = (p.title || "untitled");
+    } else { document.title = "pooja"; }
+  }
+  function go(hash){ if(location.hash === hash) show(); else location.hash = hash; }
+
+  /* ---------- writing (signed-in owner only) ---------- */
+  function slug(title){
+    var s = title.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,48);
+    return (s || "piece") + "-" + Math.random().toString(36).slice(2,6);
+  }
+  function openEditor(p){
+    editingId = p ? p.id : null;
+    $("f-title").value = p ? str(p.title) : "";
+    $("f-body").value = p ? str(p.body) : "";
+    $("f-tag").value = p ? str(p.tag) : "";
+    $("btn-publish").textContent = p ? "save changes" : "publish";
+    var del = $("btn-delete"); del.hidden = !p; del.textContent = "delete"; del.dataset.armed = "";
+    $("e-msg").textContent = "";
+    mode = "post"; show(); window.scrollTo(0,0); $("f-title").focus();
+  }
+  function closeEditor(){ mode = null; show(); }
+  $("btn-new").addEventListener("click", function(){ openEditor(null); });
+  $("btn-edit").addEventListener("click", function(){ var p = currentPost(); if(p) openEditor(p); });
+  $("btn-cancel").addEventListener("click", closeEditor);
+
+  $("v-editor").addEventListener("submit", function(e){
+    e.preventDefault();
+    if(busy) return;
+    var title = $("f-title").value.trim(), body = $("f-body").value.trim(), tag = $("f-tag").value.trim();
+    if(!title){ $("e-msg").textContent = "give it a title first."; $("f-title").focus(); return; }
+    var id = editingId || slug(title);
+    busy = true; $("e-msg").textContent = "saving...";
+    save(function(){
+      var found = false;
+      posts = posts.map(function(p){
+        if(p.id !== id) return p; found = true;
+        return { id:id, title:title, body:body, tag:tag, createdAt:p.createdAt, updatedAt:Date.now() };
+      });
+      if(!found) posts.unshift({ id:id, title:title, body:body, tag:tag, createdAt:Date.now() });
+    }, (editingId ? "edit: " : "publish: ") + title).then(function(){
+      busy = false; mode = null; go("#p-" + id);
+    }).catch(function(err){ busy = false; $("e-msg").textContent = saveError(err); });
+  });
+  $("btn-delete").addEventListener("click", function(){
+    var b = $("btn-delete");
+    if(!b.dataset.armed){ b.dataset.armed = "1"; b.textContent = "click again to delete for good"; return; }
+    if(busy || !editingId) return;
+    var id = editingId; busy = true; $("e-msg").textContent = "deleting...";
+    save(function(){ posts = posts.filter(function(p){ return p.id !== id; }); }, "delete: " + id).then(function(){
+      busy = false; mode = null; go("#home");
+    }).catch(function(err){ busy = false; $("e-msg").textContent = saveError(err); });
+  });
+
+  function openAbout(){
+    $("b-bio").value = str(site.bio);
+    ["x","instagram","linkedin","email"].forEach(function(k){ $("b-" + k).value = str(site[k]); });
+    $("b-msg").textContent = ""; mode = "about"; show(); window.scrollTo(0,0);
+  }
+  $("b-cancel").addEventListener("click", closeEditor);
+  $("v-about").addEventListener("submit", function(e){
+    e.preventDefault();
+    if(busy) return;
+    var next = { bio:$("b-bio").value.trim() };
+    ["x","instagram","linkedin","email"].forEach(function(k){ next[k] = $("b-" + k).value.trim(); });
+    busy = true; $("b-msg").textContent = "saving...";
+    save(function(){ site = next; }, "edit: about").then(function(){ busy = false; mode = null; show(); })
+      .catch(function(err){ busy = false; $("b-msg").textContent = saveError(err); });
+  });
+
+  /* ---------- sign in (reached only at #signin) ---------- */
+  $("v-signin").addEventListener("submit", function(e){
+    e.preventDefault();
+    var t = $("s-key").value.trim(); if(!t || busy) return;
+    var old = token; token = t; busy = true; $("s-msg").textContent = "checking...";
+    gh("").then(function(repo){
+      busy = false;
+      if(!(repo.permissions && repo.permissions.push)){ token = old; $("s-msg").textContent = "that key can read this site but can't save to it. make one with contents set to read and write."; return; }
+      try { localStorage.setItem(KEY, t); } catch(e2){}
+      isOwner = true; $("s-key").value = ""; $("s-msg").textContent = "";
+      load().then(function(){ go("#home"); });
+    }).catch(function(){ busy = false; token = old; $("s-msg").textContent = "that key didn't work. check you copied all of it and that it's for this repository."; });
+  });
+  function signOut(){
+    token = ""; isOwner = false; try { localStorage.removeItem(KEY); } catch(e){}
+    show();
+  }
+
+  /* ---------- load ---------- */
+  function loadPublic(){
+    return fetch(FILE + "?t=" + Date.now(), { cache:"no-store" }).then(function(r){ if(!r.ok) throw new Error("load"); return r.json(); }).then(apply);
+  }
+  function load(){
+    var p = isOwner ? readRemote().then(function(c){ apply(c.data); }).catch(function(e){ if(e && e.auth) signOut(); return loadPublic(); }) : loadPublic();
+    return p.catch(function(){}).then(function(){ loaded = true; if(!mode) show(); });
+  }
+  window.addEventListener("hashchange", function(){ if(mode) return; show(); window.scrollTo(0,0); });
+  show(); load();
+})();
+</script>
+</body>
+</html>
