@@ -8,13 +8,6 @@
   },
   "posts": [
     {
-      "id": "saasflash-smbs",
-      "title": "saasflash",
-      "body": "narrative and script: research, angles, script and visual direction through to the final cut.\n\n[sam altman and elon musk](https://www.instagram.com/p/DUqWsVTkxoi/)\n\n[VC pov](https://www.instagram.com/p/DMYIi1esNQL/)\n\n[GTA](https://www.instagram.com/p/Df7PerasU1w/)\n\n[PHP](https://www.instagram.com/reel/Dez7Jh-smFp/)\n\n[palantir: not many views but really proud of it](https://www.instagram.com/reel/DePNXFoMnZQ/)\n\n[AI mascot](https://www.instagram.com/reel/DeB_LnAsds8/)\n\n[midjourney](https://www.instagram.com/reel/DcvzQvWsqAf/)\n\n[Uber CEO](https://www.instagram.com/reel/DV_IBn0E0aL/)\n\n[zip file](https://www.instagram.com/reel/DScakKjE-ZF/)\n\nto mention few",
-      "tag": "",
-      "createdAt": 1795460632328
-    },
-    {
       "id": "how-i-work",
       "title": "how i work",
       "body": "every project i've done started the same way: one call. that's the whole brief.\n\nafter the call i go and read. different sources, different sides of the topic, until i actually understand it and not just the vocabulary around it.\n\nthen i think. a lot. the question i keep asking is how you'd convince someone of this from first principles, without leaning on hype. that's where the perspective comes from.\n\ni write a couple of angles, pick the one that holds, and write the script.\n\nthen it goes to production. i sit with the editors and give them the visual direction: how it should move, what it should look like, where it should land.\n\ni own all of it, end to end.",
@@ -22,11 +15,18 @@
       "createdAt": 1794850000000
     },
     {
-      "id": "kalshi",
-      "title": "kalshi: narrative",
-      "body": "narrative work for kalshi. this one is under nda, so i can talk about how i worked on it, not what's in it.",
-      "tag": "nda",
-      "createdAt": 1794763600000
+      "id": "saasflash-smbs",
+      "title": "saasflash",
+      "body": "narrative and script: research, angles, script and visual direction through to the final cut.\n\n[sam altman and elon musk](https://www.instagram.com/p/DUqWsVTkxoi/)\n\n[VC pov](https://www.instagram.com/p/DMYIi1esNQL/)\n\n[GTA](https://www.instagram.com/p/Df7PerasU1w/)\n\n[PHP](https://www.instagram.com/reel/Dez7Jh-smFp/)\n\n[palantir: not many views but really proud of it](https://www.instagram.com/reel/DePNXFoMnZQ/)\n\n[AI mascot](https://www.instagram.com/reel/DeB_LnAsds8/)\n\n[midjourney](https://www.instagram.com/reel/DcvzQvWsqAf/)\n\n[Uber CEO](https://www.instagram.com/reel/DV_IBn0E0aL/)\n\n[zip file](https://www.instagram.com/reel/DScakKjE-ZF/)\n\nto mention few",
+      "tag": "",
+      "createdAt": 1795460632328
+    },
+    {
+      "id": "deel-launch",
+      "title": "deel: launch",
+      "body": "Akai: customer testimonial video\n\n- Creative directed Akai's testimonial video end to end.\n- Chose which customers to feature, picking voices that would make the product's   value land with the right audience.\n- Gave each one a shooting brief covering framing, setup and delivery, so footage recorded in different places would cut together as one piece.\n- Guided what each person spoke about, shaping the talking points in advance so every clip carried a piece of the story.\n- Collected the raw files and handled the full post production: selected the strongest moments, built the narrative edit, and chose the music and on screen design.\n\n[akai testimonial](https://www.linkedin.com/posts/akai-run_the-workflows-that-keep-a-business-running-activity-7473177673561788416-V8Jm?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAADa76iwBUSmZcnzUjLb3z07oj4InktE8aG8)\n\n\nAkai: launch video\n\nProduced Akai's launch video end to end, from concept to final cut.\n\n[launch video](https://www.linkedin.com/posts/akai-run_your-ops-team-is-running-workflows-that-should-activity-7473162572997976065-L1ct?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAADa76iwBUSmZcnzUjLb3z07oj4InktE8aG8)",
+      "tag": "",
+      "createdAt": 1794245200000
     },
     {
       "id": "recursive-intelligence",
@@ -43,13 +43,6 @@
       "createdAt": 1794590800000
     },
     {
-      "id": "litigation-in-2026",
-      "title": "Biggest litigation in 2026                                (nda)",
-      "body": "narrative and script. one call for the brief, then research, angles, script and visual direction through to the final cut.",
-      "tag": "",
-      "createdAt": 1794504400000
-    },
-    {
       "id": "greg-isenberg",
       "title": "greg isenberg",
       "body": "narrative and script. one call for the brief, then research, angles, script and visual direction through to the final cut.\n\n[nikita bier](https://www.instagram.com/reel/DSGpXVBkXEB/)\n\n[game theory](https://www.instagram.com/reel/DOMKUh7kQ9x/)\n\n[two tiered web](https://www.instagram.com/reel/DNx4hkt4gnm/)",
@@ -57,18 +50,25 @@
       "createdAt": 1794418000000
     },
     {
+      "id": "kalshi",
+      "title": "kalshi: narrative",
+      "body": "narrative work for kalshi. this one is under nda, so i can talk about how i worked on it, not what's in it.",
+      "tag": "nda",
+      "createdAt": 1794763600000
+    },
+    {
+      "id": "litigation-in-2026",
+      "title": "Biggest litigation in 2026                                (nda)",
+      "body": "narrative and script. one call for the brief, then research, angles, script and visual direction through to the final cut.",
+      "tag": "",
+      "createdAt": 1794504400000
+    },
+    {
       "id": "bitgo",
       "title": "bitgo",
       "body": "narrative and script. one call for the brief, then research, angles, script and visual direction through to the final cut.",
       "tag": "",
       "createdAt": 1794331600000
-    },
-    {
-      "id": "deel-launch",
-      "title": "deel: launch",
-      "body": "Akai: customer testimonial video\n\n- Creative directed Akai's testimonial video end to end.\n- Chose which customers to feature, picking voices that would make the product's   value land with the right audience.\n- Gave each one a shooting brief covering framing, setup and delivery, so footage recorded in different places would cut together as one piece.\n- Guided what each person spoke about, shaping the talking points in advance so every clip carried a piece of the story.\n- Collected the raw files and handled the full post production: selected the strongest moments, built the narrative edit, and chose the music and on screen design.\n\n[akai testimonial](https://www.linkedin.com/posts/akai-run_the-workflows-that-keep-a-business-running-activity-7473177673561788416-V8Jm?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAADa76iwBUSmZcnzUjLb3z07oj4InktE8aG8)\n\n\nAkai: launch video\n\nProduced Akai's launch video end to end, from concept to final cut.\n\n[launch video](https://www.linkedin.com/posts/akai-run_your-ops-team-is-running-workflows-that-should-activity-7473162572997976065-L1ct?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAADa76iwBUSmZcnzUjLb3z07oj4InktE8aG8)",
-      "tag": "",
-      "createdAt": 1794245200000
     },
     {
       "id": "evolving-ai",
