@@ -61,15 +61,15 @@
       "title": "kalshi: narrative",
       "body": "narrative work for kalshi. this one is under nda, so i can talk about how i worked on it, not what's in it.",
       "tag": "nda",
-      "createdAt": 1794763600000,
-      "updatedAt": 1795462533220
+      "createdAt": 1794763600000
     },
     {
       "id": "litigation-in-2026",
-      "title": "Biggest litigation in 2026                                (nda)",
+      "title": "Biggest litigation in 2026",
       "body": "narrative and script. one call for the brief, then research, angles, script and visual direction through to the final cut.",
-      "tag": "",
-      "createdAt": 1794504400000
+      "tag": "nda",
+      "createdAt": 1794504400000,
+      "updatedAt": 1795462552190
     },
     {
       "id": "evolving-ai",
