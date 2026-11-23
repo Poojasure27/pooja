@@ -8,6 +8,13 @@
   },
   "posts": [
     {
+      "id": "community-ls8l",
+      "title": "community",
+      "body": "built a community of cracked tech people in rajkot, gujarat, a city nobody expects. hosted a hackathon. one member got hired from it",
+      "tag": "",
+      "createdAt": 1795463997202
+    },
+    {
       "id": "how-i-work",
       "title": "how i work",
       "body": "every project i've done started the same way: one call. that's the whole brief.\n\nafter the call i go and read. different sources, different sides of the topic, until i actually understand it and not just the vocabulary around it.\n\nthen i think. a lot. the question i keep asking is how you'd convince someone of this from first principles, without leaning on hype. that's where the perspective comes from.\n\ni write a couple of angles, pick the one that holds, and write the script.\n\nthen it goes to production. i sit with the editors and give them the visual direction: how it should move, what it should look like, where it should land.\n\ni own all of it, end to end.",
