@@ -52,6 +52,16 @@ h2{font-family:var(--display);font-weight:500;font-size:26px;letter-spacing:-0.0
 .list a:hover{color:var(--bright)}
 .list .tag{font-size:14px;color:var(--muted);white-space:nowrap}
 .empty{color:var(--muted);padding:10px 0}
+.head-tools{display:flex;gap:16px;align-items:baseline;font-size:14px;margin-left:auto}
+.list.reordering li{display:flex;align-items:center;gap:12px}
+.list.reordering .r-title{flex:1;padding:10px 0;color:var(--ink)}
+.list.reordering .r-btn{font-size:16px;padding:4px 8px;line-height:1}
+.list.reordering .r-btn:disabled{opacity:.25;cursor:default}
+.list.reordering .r-btn:disabled:hover{color:var(--muted)}
+.prose figure{margin:2em 0}
+.prose figure img{display:block;max-width:100%;height:auto;border-radius:3px}
+.prose figcaption{font-size:14px;color:var(--muted);margin-top:8px}
+.tools{display:flex;gap:18px;align-items:baseline;font-size:14px;flex-wrap:wrap}
 
 .piece{max-width:640px}
 .bar{display:flex;gap:18px;font-size:15px;margin-bottom:44px}
@@ -93,7 +103,13 @@ label{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:2
       <div class="words-head">
         <h2>work</h2>
         <button class="plus" id="btn-new" hidden aria-label="Write a new piece" title="Write a new piece">+</button>
+        <div class="head-tools" id="head-tools" hidden>
+          <button type="button" id="btn-reorder">reorder</button>
+          <button type="button" id="btn-order-save" hidden>save order</button>
+          <button type="button" id="btn-order-cancel" hidden>cancel</button>
+        </div>
       </div>
+      <div class="msg" id="r-msg" role="status"></div>
       <ul class="list" id="list"></ul>
     </section>
   </main>
@@ -110,7 +126,12 @@ label{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:2
   <form id="v-editor" class="editor" hidden autocomplete="off">
     <input id="f-title" type="text" placeholder="title" maxlength="140" aria-label="Title">
     <textarea id="f-body" placeholder="start writing" aria-label="Body"></textarea>
-    <div class="hint">leave a blank line for a new paragraph. start a line with ## for a subheading. [text](https://link) makes a link.</div>
+    <div class="tools">
+      <button type="button" id="btn-image">+ add image here</button>
+      <input type="file" id="f-image" accept="image/*" hidden>
+      <span class="hint" id="img-msg" role="status"></span>
+    </div>
+    <div class="hint">leave a blank line for a new paragraph. start a line with ## for a subheading. [text](https://link) makes a link. images go where your cursor is; text after the | becomes a caption.</div>
     <label>small note beside the title in the list (optional)
       <input id="f-tag" type="text" maxlength="24" placeholder="e.g. nda">
     </label>
@@ -163,6 +184,7 @@ label{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:2
 
   var $ = function(id){ return document.getElementById(id); };
   var posts = [], site = {bio:"",x:"",instagram:"",linkedin:"",email:""};
+  var draftOrder = null;
   var token = "", isOwner = false, editingId = null, mode = null, loaded = false, busy = false;
   try { token = localStorage.getItem(KEY) || ""; } catch(e){}
   isOwner = !!token;
@@ -178,7 +200,7 @@ label{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:2
     site = { bio:str(s.bio), x:str(s.x), instagram:str(s.instagram), linkedin:str(s.linkedin), email:str(s.email) };
     posts = (Array.isArray(data.posts) ? data.posts : []).map(function(x){
       return { id:str(x.id), title:str(x.title), body:str(x.body), tag:str(x.tag), createdAt:x.createdAt };
-    }).filter(function(p){ return p.id; }).sort(function(a,b){ return (b.createdAt||0) - (a.createdAt||0); });
+    }).filter(function(p){ return p.id; }); /* list order = the order saved in content.json */
   }
   function snapshot(){ return { site:site, posts:posts }; }
 
@@ -226,7 +248,16 @@ label{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:2
     str(text).replace(/\r/g,"").split(/\n\s*\n/).forEach(function(block){
       block = block.trim(); if(!block) return;
       var node;
-      if(/^##\s+/.test(block)){ node = document.createElement("h3"); node.textContent = block.replace(/^##\s+/,""); }
+      var im = block.match(/^!\[([^\]]*)\]\(([^)\s]+)\)$/);
+      if(im && (/^https:\/\//i.test(im[2]) || /^images\/[A-Za-z0-9._-]+$/.test(im[2]))){
+        node = document.createElement("figure");
+        var img = document.createElement("img"), parts = im[1].split("|");
+        img.src = im[2]; img.alt = parts[0].trim(); img.loading = "lazy";
+        node.appendChild(img);
+        var cap = parts.slice(1).join("|").trim();
+        if(cap){ var fc = document.createElement("figcaption"); fc.textContent = cap; node.appendChild(fc); }
+      }
+      else if(/^##\s+/.test(block)){ node = document.createElement("h3"); node.textContent = block.replace(/^##\s+/,""); }
       else {
         node = document.createElement("p");
         block.split("\n").forEach(function(line, i){ if(i) node.appendChild(document.createElement("br")); inline(node, line); });
@@ -263,6 +294,25 @@ label{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:2
       li.textContent = !loaded ? "" : isOwner ? "nothing here yet. press + to write." : "nothing here yet.";
       ul.appendChild(li); return;
     }
+    ul.classList.toggle("reordering", !!draftOrder);
+    if(draftOrder){
+      draftOrder.forEach(function(p, i){
+        var li = document.createElement("li"), t = document.createElement("span");
+        t.className = "r-title"; t.textContent = p.title || "untitled"; li.appendChild(t);
+        [["\u2191", -1, "move up"], ["\u2193", 1, "move down"]].forEach(function(b){
+          var btn = document.createElement("button"); btn.type = "button"; btn.className = "r-btn";
+          btn.textContent = b[0]; btn.setAttribute("aria-label", b[2] + ": " + (p.title || "untitled"));
+          var to = i + b[1]; btn.disabled = to < 0 || to >= draftOrder.length;
+          btn.addEventListener("click", function(){
+            var x = draftOrder[i]; draftOrder[i] = draftOrder[to]; draftOrder[to] = x; renderList();
+            var again = $("list").children[to]; if(again){ var bb = again.querySelectorAll(".r-btn")[b[1] < 0 ? 0 : 1]; if(bb && !bb.disabled) bb.focus(); }
+          });
+          li.appendChild(btn);
+        });
+        ul.appendChild(li);
+      });
+      return;
+    }
     posts.forEach(function(p){
       var li = document.createElement("li"), a = document.createElement("a"), t = document.createElement("span");
       a.href = "#p-" + p.id; t.textContent = p.title || "untitled"; a.appendChild(t);
@@ -285,7 +335,10 @@ label{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:2
     var p = currentPost();
     var view = mode === "post" ? "v-editor" : mode === "about" ? "v-about" : location.hash === "#signin" ? "v-signin" : p ? "v-piece" : "v-home";
     ["v-home","v-piece","v-editor","v-about","v-signin"].forEach(function(v){ $(v).hidden = v !== view; });
-    $("btn-new").hidden = !isOwner;
+    $("btn-new").hidden = !isOwner || !!draftOrder;
+    $("head-tools").hidden = !isOwner;
+    $("btn-reorder").hidden = !!draftOrder || posts.length < 2;
+    $("btn-order-save").hidden = $("btn-order-cancel").hidden = !draftOrder;
     if(view === "v-home"){ renderAbout(); renderList(); }
     if(view === "v-piece"){
       $("p-title").textContent = p.title || "untitled";
@@ -309,7 +362,7 @@ label{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:2
     $("f-tag").value = p ? str(p.tag) : "";
     $("btn-publish").textContent = p ? "save changes" : "publish";
     var del = $("btn-delete"); del.hidden = !p; del.textContent = "delete"; del.dataset.armed = "";
-    $("e-msg").textContent = "";
+    $("e-msg").textContent = ""; $("img-msg").textContent = "";
     mode = "post"; show(); window.scrollTo(0,0); $("f-title").focus();
   }
   function closeEditor(){ mode = null; show(); }
@@ -361,6 +414,67 @@ label{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:2
       .catch(function(err){ busy = false; $("b-msg").textContent = saveError(err); });
   });
 
+  /* ---------- reorder the work list (owner only) ---------- */
+  $("btn-reorder").addEventListener("click", function(){ draftOrder = posts.slice(); $("r-msg").textContent = ""; show(); });
+  $("btn-order-cancel").addEventListener("click", function(){ draftOrder = null; $("r-msg").textContent = ""; show(); });
+  $("btn-order-save").addEventListener("click", function(){
+    if(busy || !draftOrder) return;
+    var ids = draftOrder.map(function(p){ return p.id; });
+    busy = true; $("r-msg").textContent = "saving...";
+    save(function(){
+      var byId = {}; posts.forEach(function(p){ byId[p.id] = p; });
+      var next = ids.filter(function(id){ return byId[id]; }).map(function(id){ return byId[id]; });
+      posts.forEach(function(p){ if(ids.indexOf(p.id) < 0) next.unshift(p); }); /* anything added meanwhile stays on top */
+      posts = next;
+    }, "reorder work").then(function(){
+      busy = false; draftOrder = null; $("r-msg").textContent = ""; show();
+    }).catch(function(err){ busy = false; $("r-msg").textContent = saveError(err).replace(" your text is still here.", "").replace(" your text is still here, try again.", " try again."); });
+  });
+
+  /* ---------- images inside a piece (owner only) ---------- */
+  function shrink(file){
+    return new Promise(function(resolve, reject){
+      var url = URL.createObjectURL(file), img = new Image();
+      img.onload = function(){
+        var max = 1800, w = img.naturalWidth, h = img.naturalHeight, k = Math.min(1, max / Math.max(w, h));
+        var c = document.createElement("canvas"); c.width = Math.round(w * k); c.height = Math.round(h * k);
+        var png = file.type === "image/png";
+        var ctx = c.getContext("2d"); if(!png){ ctx.fillStyle = "#000"; ctx.fillRect(0, 0, c.width, c.height); }
+        ctx.drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+        var type = png ? "image/png" : "image/jpeg";
+        resolve({ ext: png ? "png" : "jpg", data: c.toDataURL(type, 0.86).split(",")[1] });
+      };
+      img.onerror = function(){ URL.revokeObjectURL(url); reject(new Error("decode")); };
+      img.src = url;
+    });
+  }
+  function insertAtCursor(ta, text){
+    var a = ta.selectionStart, b = ta.selectionEnd, v = ta.value;
+    var before = v.slice(0, a).replace(/\s*$/, ""), after = v.slice(b).replace(/^\s*/, "");
+    var chunk = (before ? "\n\n" : "") + text + (after ? "\n\n" : "");
+    ta.value = before + chunk + after;
+    var pos = before.length + chunk.length; ta.focus(); ta.setSelectionRange(pos, pos);
+  }
+  $("btn-image").addEventListener("click", function(){ if(!busy) $("f-image").click(); });
+  $("f-image").addEventListener("change", function(){
+    var file = this.files && this.files[0]; this.value = "";
+    if(!file) return;
+    var title = $("f-title").value.trim(), base = (title || "image").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 32) || "image";
+    busy = true; $("img-msg").textContent = "uploading image...";
+    shrink(file).then(function(r){
+      var path = "images/" + base + "-" + Date.now().toString(36) + "." + r.ext;
+      return gh("/contents/" + path, { method:"PUT", headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ message:"add image: " + path, branch:BRANCH, content:r.data }) }).then(function(){ return path; });
+    }).then(function(path){
+      busy = false;
+      insertAtCursor($("f-body"), "![" + (title || "image") + " | ](" + path + ")");
+      $("img-msg").textContent = "image added. publish to save the piece. it can take a minute to show for visitors.";
+    }).catch(function(err){
+      busy = false;
+      $("img-msg").textContent = err && err.auth ? "your key was refused. sign in again at #signin." : err && err.message === "decode" ? "couldn't read that file. try a jpg or png." : "the image didn't upload. try again.";
+    });
+  });
+
   /* ---------- sign in (reached only at #signin) ---------- */
   $("v-signin").addEventListener("submit", function(e){
     e.preventDefault();
@@ -375,7 +489,7 @@ label{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:2
     }).catch(function(){ busy = false; token = old; $("s-msg").textContent = "that key didn't work. check you copied all of it and that it's for this repository."; });
   });
   function signOut(){
-    token = ""; isOwner = false; try { localStorage.removeItem(KEY); } catch(e){}
+    token = ""; isOwner = false; draftOrder = null; try { localStorage.removeItem(KEY); } catch(e){}
     show();
   }
 
@@ -387,7 +501,7 @@ label{font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:2
     var p = isOwner ? readRemote().then(function(c){ apply(c.data); }).catch(function(e){ if(e && e.auth) signOut(); return loadPublic(); }) : loadPublic();
     return p.catch(function(){}).then(function(){ loaded = true; if(!mode) show(); });
   }
-  window.addEventListener("hashchange", function(){ if(mode) return; show(); window.scrollTo(0,0); });
+  window.addEventListener("hashchange", function(){ if(mode) return; draftOrder = null; show(); window.scrollTo(0,0); });
   show(); load();
 })();
 </script>
